@@ -1,11 +1,10 @@
 import Foundation
+import KeychainSwift
 import LocalAuthentication
 import Sodium
-import KeychainSwift
 
 @_cdecl("auth")
 public func auth(msg: UnsafePointer<CChar>) -> Bool {
-
     let sodium = Sodium()
     let keychain = KeychainSwift()
 
@@ -33,8 +32,5 @@ public func auth(msg: UnsafePointer<CChar>) -> Bool {
     return res
 }
 
-
 @_cdecl("auth")
-public func create(msg: UnsafePointer<CChar>) -> [UInt8] {
-
-}
+public func create(msg: UnsafePointer<CChar>) -> [UInt8] {}

@@ -50,7 +50,7 @@ jobs:
         run: swift test --parallel -Xswiftc -DDEBUG
       - name: Generate coverage
         run: |
-          xcodebuild -quiet -parallel-testing-enabled YES -scheme keri-swift -destination platform=macOS -enableCodeCoverage YES build test
+          xcodebuild -quiet -parallel-testing-enabled YES -scheme keying -destination platform=macOS -enableCodeCoverage YES build test
       - name: Upload Codecov
         run: bash <(curl -s https://codecov.io/bash) -t ${{secrets.CODECOV_TOKEN}} -f *.coverage.txt
 
