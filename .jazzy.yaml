@@ -1,0 +1,7 @@
+author: Kevin Griffin
+author_url: https://keri.one/
+github_url: https://github.com/WebOfTrust/keying
+root_url: https://weboftrust.github.io/keying/
+module: keying
+output: docs
+theme: fullwidth

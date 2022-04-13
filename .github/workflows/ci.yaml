@@ -1,0 +1,67 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Lint
+        uses: norio-nomura/action-swiftlint@3.2.1
+        with:
+          args: --config .swiftlint.yaml --strict
+  format:
+    needs: lint
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install swiftformat
+        run: brew install swiftformat
+      - name: Run formatting
+        run: ./scripts/format.sh .
+
+  test:
+    needs: format
+    runs-on: macOS-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode:
+          - Xcode_13.2.app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Show all Xcode versions
+        run: ls -an /Applications/ | grep Xcode*
+      - name: Change Xcode command line tools
+        run: sudo xcode-select -s /Applications/${{ matrix.xcode }}/Contents/Developer
+      - name: SPM Build
+        run: swift build
+      - name: SPM Tests
+        run: swift test --parallel -Xswiftc -DDEBUG
+      - name: Generate coverage
+        run: |
+          xcodebuild -quiet -parallel-testing-enabled YES -scheme keri-swift -destination platform=macOS -enableCodeCoverage YES build test
+      - name: Upload Codecov
+        run: bash <(curl -s https://codecov.io/bash) -t ${{secrets.CODECOV_TOKEN}} -f *.coverage.txt
+
+  publish:
+    needs: test
+    runs-on: macos-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Publish Jazzy Docs
+      uses: steven0351/publish-jazzy-docs@v1
+      with:
+        personal_access_token: ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
+        config: .jazzy.yaml
