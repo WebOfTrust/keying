@@ -9,3 +9,4 @@ DerivedData/
 .netrc
 .idea/
 __pycache__/
+venv
