@@ -4,7 +4,7 @@ A simple python wrapper around the LocalAuthentication and Keychain APIs on iOS/
 
 [![Swift 5.5](https://img.shields.io/badge/Swift-5.5-blue.svg)](https://swift.org/download/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Swift](https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml)
+[![ci](https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/weboftrust/keying/branch/main/graph/badge.svg?token=QmX4JiwGoZ)](https://codecov.io/gh/weboftrust/keying)
 
 
