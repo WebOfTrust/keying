@@ -3,14 +3,9 @@ import KeychainSwift
 import LocalAuthentication
 import Sodium
 
-@_cdecl("auth")
-public func auth(msg: UnsafePointer<CChar>) -> Bool {
-    let sodium = Sodium()
-    let keychain = KeychainSwift()
+typealias AuthFunc = () -> Bool
 
-    print(sodium)
-    print(keychain)
-
+func localAuth() -> Bool {
     let context = LAContext()
     var error: NSError?
     guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) else {
@@ -19,18 +14,65 @@ public func auth(msg: UnsafePointer<CChar>) -> Bool {
 
     var res = false
     let sem = DispatchSemaphore(value: 0)
-    context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: String(cString: msg)) { success, _ in
+    context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Authenticate") { success, _ in
         res = success
         sem.signal()
     }
     sem.wait()
 
-    guard res else {
-        return res
-    }
-
     return res
 }
 
-@_cdecl("auth")
-public func create(msg: UnsafePointer<CChar>) -> [UInt8] {}
+/**
+     create generates new public/private key pair, storing the private key in the keychain and returning the Base64
+        encoded public key
+    - Throws: `Keying.failedToCreateKeyPair`
+    - Throws: `Keying.failedToEncodePublicKey`
+    - Throws: `Keying.failedToSaveToKeychain`
+    - Returns:
+        Base64 encoded public key of generated key pair
+
+     */
+@_cdecl("create")
+public func create() -> UnsafePointer<CChar> {
+    return UnsafePointer<CChar>(_create(auth: localAuth))
+}
+
+func _create(auth: AuthFunc) -> String {
+    guard auth() else {
+        return ""
+    }
+
+    let sodium = Sodium()
+
+    guard let kp = sodium.box.keyPair() else {
+        return ""
+    }
+
+    guard let pks: String = sodium.utils.bin2base64(kp.publicKey) else {
+        return ""
+    }
+
+    let keychain = KeychainSwift()
+    guard keychain.set(Data(_: kp.secretKey), forKey: pks, withAccess: .accessibleWhenPasscodeSetThisDeviceOnly) else {
+        return ""
+    }
+
+    return pks
+}
+
+/**
+     sign returns Base64 encoded signature for data (msg) by looked up private key via keychain from public key (pk)
+     - Parameters:
+        - msg: Base64 data to be encoded
+        - pk:  Base64 Encoded public key used to look up signing secret key
+    - Throws: `Keying.failedToCreateKeyPair`
+    - Throws: `Keying.failedToEncodePublicKey`
+    - Throws: `Keying.failedToSaveToKeychain`
+    - Returns:
+        Base64 encoded signature
+     */
+@_cdecl("sign")
+public func sign(msg: UnsafePointer<CChar>, pk: UnsafePointer<CChar>) -> UnsafePointer<CChar> {
+    return UnsafePointer<CChar>("sign")
+}

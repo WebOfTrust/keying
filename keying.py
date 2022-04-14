@@ -1,8 +1,19 @@
 import ctypes
+import base64
 
-authy = ctypes.CDLL('./libauthing.dylib')
-authy.auth.argtypes = (ctypes.c_char_p)
-authy.auth.restype = ctypes.c_bool
+keying = ctypes.CDLL('./libkeying.dylib')
+keying.create.restype = ctypes.c_char_p
+keying.sign.argtypes = (ctypes.c_char_p,)
+keying.sign.restype = ctypes.c_char_p
 
-def auth(msg: str):
-    return authy.auth(ctypes.c_char_p(msg.encode()))
+def create():
+    print("creating")
+    out = keying.create()
+    print(out)
+    print(out.decode())
+
+
+def sign():
+    out = keying.sign(ctypes.c_char_p("dGVzdA==".encode()))
+    print(out)
+    print(out.decode())
