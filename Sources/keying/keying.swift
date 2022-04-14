@@ -24,18 +24,18 @@ func localAuth() -> Bool {
 }
 
 /**
-     create generates new public/private key pair, storing the private key in the keychain and returning the Base64
-        encoded public key
-    - Throws: `Keying.failedToCreateKeyPair`
-    - Throws: `Keying.failedToEncodePublicKey`
-    - Throws: `Keying.failedToSaveToKeychain`
-    - Returns:
-        Base64 encoded public key of generated key pair
+  create generates new public/private key pair, storing the private key in the keychain and returning the Base64
+     encoded public key
+ - Throws: `Keying.failedToCreateKeyPair`
+ - Throws: `Keying.failedToEncodePublicKey`
+ - Throws: `Keying.failedToSaveToKeychain`
+ - Returns:
+     Base64 encoded public key of generated key pair
 
-     */
+  */
 @_cdecl("create")
 public func create() -> UnsafePointer<CChar> {
-    return UnsafePointer<CChar>(_create(auth: localAuth))
+    UnsafePointer<CChar>(_create(auth: localAuth))
 }
 
 func _create(auth: AuthFunc) -> String {
@@ -62,17 +62,17 @@ func _create(auth: AuthFunc) -> String {
 }
 
 /**
-     sign returns Base64 encoded signature for data (msg) by looked up private key via keychain from public key (pk)
-     - Parameters:
-        - msg: Base64 data to be encoded
-        - pk:  Base64 Encoded public key used to look up signing secret key
-    - Throws: `Keying.failedToCreateKeyPair`
-    - Throws: `Keying.failedToEncodePublicKey`
-    - Throws: `Keying.failedToSaveToKeychain`
-    - Returns:
-        Base64 encoded signature
-     */
+  sign returns Base64 encoded signature for data (msg) by looked up private key via keychain from public key (pk)
+  - Parameters:
+     - msg: Base64 data to be encoded
+     - pk:  Base64 Encoded public key used to look up signing secret key
+ - Throws: `Keying.failedToCreateKeyPair`
+ - Throws: `Keying.failedToEncodePublicKey`
+ - Throws: `Keying.failedToSaveToKeychain`
+ - Returns:
+     Base64 encoded signature
+  */
 @_cdecl("sign")
 public func sign(msg: UnsafePointer<CChar>, pk: UnsafePointer<CChar>) -> UnsafePointer<CChar> {
-    return UnsafePointer<CChar>("sign")
+    UnsafePointer<CChar>("sign")
 }

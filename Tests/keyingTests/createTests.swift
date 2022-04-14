@@ -13,7 +13,7 @@ final class CreateTests: XCTestCase {
 
     func testCreateAuthFail() {
         // fix throw instead
-        XCTAssertEqual(_create(auth: badAuth), "")
+        XCTAssertEqual(_create(auth: self.badAuth), "")
     }
 
     func goodAuth() -> Bool {
@@ -25,9 +25,8 @@ final class CreateTests: XCTestCase {
         let pk = _create(auth: goodAuth)
         XCTAssertTrue(pk.count > 0)
     }
-    
+
     func testLocalAuth() {
 //        localAuth()
     }
 }
-
