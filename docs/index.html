@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>keying  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="keying  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          keying Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <div class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </div>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/WebOfTrust/keying">
+            <img class="header-icon" src="img/gh.png" alt="GitHub"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fweboftrust.github.io%2Fkeying%2Fdocsets%2Fkeying.xml">
+            <img class="header-icon" src="img/dash.png" alt="Dash"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">keying Reference</a>
+      <img class="carat" src="img/carat.png" alt=""/>
+      keying  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/c:(cm)create">create()</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/c:(cm)signWithMsg:pk:">sign(msg:pk:)</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            
+            <h1 id='keying' class='heading'>Keying</h1>
+
+<p>A simple python wrapper around the LocalAuthentication and Keychain APIs on iOS/MacOS.</p>
+
+<p><a href="https://swift.org/download/"><img src="https://img.shields.io/badge/Swift-5.5-blue.svg" alt="Swift 5.5"></a>
+<a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"></a>
+<a href="https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml"><img src="https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml/badge.svg?branch=main" alt="Swift"></a>
+<a href="https://codecov.io/gh/weboftrust/keying"><img src="https://codecov.io/gh/weboftrust/keying/branch/main/graph/badge.svg?token=QmX4JiwGoZ" alt="codecov"></a></p>
+
+<p>Compilation:</p>
+<pre class="highlight shell"><code>swift build
+</code></pre>
+
+<p>This produces a libkeying.dylib.</p>
+<h4 id='note' class='heading'>Note</h4>
+
+<p>The current python module implementation relies on the packaged lib being local.</p>
+
+<p>Other options would be to move things globally (and update the module):</p>
+<pre class="highlight shell"><code><span class="nb">cp mv </span>libkeying.dylib /usr/lib64/python3.9/lib-dynload
+<span class="nb">cp </span>keying.py /usr/local/lib/python3.9/site-packages
+</code></pre>
+<h4 id='sample-local-usage' class='heading'>Sample local usage</h4>
+<pre class="highlight shell"><code>❯ swift build
+❯ python
+Python 3.9.7 <span class="o">(</span>default, Jan 27 2022, 19:47:28<span class="o">)</span>
+<span class="o">[</span>Clang 13.0.0 <span class="o">(</span>clang-1300.0.29.30<span class="o">)]</span> on darwin
+Type <span class="s2">"help"</span>, <span class="s2">"copyright"</span>, <span class="s2">"credits"</span> or <span class="s2">"license"</span> <span class="k">for </span>more information.
+<span class="o">&gt;&gt;&gt;</span> import keying
+<span class="o">&gt;&gt;&gt;</span> keying.auth<span class="o">(</span><span class="s2">"Your authentication message"</span><span class="o">)</span>
+True
+<span class="o">&gt;&gt;&gt;</span>
+</code></pre>
+
+<p><img src="keying.png" alt="Authentication message"></p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2022 <a class="link" href="https://keri.one/" target="_blank" rel="external noopener">Kevin Griffin</a>. All rights reserved. (Last updated: 2022-04-14)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+    </section>
+  </body>
+</html>
