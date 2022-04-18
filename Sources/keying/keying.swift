@@ -26,11 +26,8 @@ func localAuth() -> Bool {
 /**
   create generates new public/private key pair, storing the private key in the keychain and returning the Base64
      encoded public key
- - Throws: `Keying.failedToCreateKeyPair`
- - Throws: `Keying.failedToEncodePublicKey`
- - Throws: `Keying.failedToSaveToKeychain`
  - Returns:
-     Base64 encoded public key of generated key pair
+     Base64 encoded public key of generated key pair or "1" for error
 
   */
 @_cdecl("create")
@@ -38,27 +35,44 @@ public func create() -> UnsafePointer<CChar> {
     UnsafePointer<CChar>(_create(auth: localAuth))
 }
 
-func _create(auth: AuthFunc) -> String {
+func _create(auth: AuthFunc, seed: [UInt8]? = []) -> String {
     guard auth() else {
         return ""
     }
 
     let sodium = Sodium()
 
-    guard let kp = sodium.box.keyPair() else {
+    // force unwrap seed as it defaults to an empty array
+    let (pk, sk) = _signKeyPair(seed: seed!)
+    if pk.isEmpty || sk.isEmpty {
         return ""
     }
 
-    guard let pks: String = sodium.utils.bin2base64(kp.publicKey) else {
+    guard let pks: String = sodium.utils.bin2base64(pk, variant: .URLSAFE) else {
         return ""
     }
 
     let keychain = KeychainSwift()
-    guard keychain.set(Data(_: kp.secretKey), forKey: pks, withAccess: .accessibleWhenPasscodeSetThisDeviceOnly) else {
+    guard keychain.set(Data(_: sk), forKey: pks, withAccess: .accessibleWhenPasscodeSetThisDeviceOnly) else {
         return ""
     }
 
     return pks
+}
+
+private func _signKeyPair(seed: [UInt8] = []) -> ([UInt8], [UInt8]) {
+    let sodium = Sodium()
+    if seed.isEmpty {
+        guard let kp = sodium.sign.keyPair() else {
+            return ([], [])
+        }
+        return (kp.publicKey, kp.secretKey)
+    } else {
+        guard let kp = sodium.sign.keyPair(seed: seed) else {
+            return ([], [])
+        }
+        return (kp.publicKey, kp.secretKey)
+    }
 }
 
 /**
@@ -66,13 +80,32 @@ func _create(auth: AuthFunc) -> String {
   - Parameters:
      - msg: Base64 data to be encoded
      - pk:  Base64 Encoded public key used to look up signing secret key
- - Throws: `Keying.failedToCreateKeyPair`
- - Throws: `Keying.failedToEncodePublicKey`
- - Throws: `Keying.failedToSaveToKeychain`
  - Returns:
-     Base64 encoded signature
+     Base64 encoded signature or "1" for error
   */
 @_cdecl("sign")
 public func sign(msg: UnsafePointer<CChar>, pk: UnsafePointer<CChar>) -> UnsafePointer<CChar> {
-    UnsafePointer<CChar>("sign")
+    UnsafePointer<CChar>(_sign(message: String(cString: msg), pk: String(cString: pk)))
+}
+
+func _sign(message: String, pk: String) -> String {
+    let keychain = KeychainSwift()
+    guard let sk = keychain.getData(pk) else {
+        return ""
+    }
+
+    let sodium = Sodium()
+    guard let bmsg = sodium.utils.base642bin(message, variant: .URLSAFE) else {
+        return ""
+    }
+
+    guard let sig = sodium.sign.signature(message: bmsg, secretKey: [UInt8](sk)) else {
+        return ""
+    }
+
+    guard let sigs: String = sodium.utils.bin2base64(sig, variant: .URLSAFE) else {
+        return ""
+    }
+
+    return sigs
 }

@@ -7,7 +7,6 @@ A simple python wrapper around the LocalAuthentication and Keychain APIs on iOS/
 [![ci](https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/WebOfTrust/keying/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/weboftrust/keying/branch/main/graph/badge.svg?token=QmX4JiwGoZ)](https://codecov.io/gh/weboftrust/keying)
 
-
 Compilation:
 
 ```shell
